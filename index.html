@@ -85,20 +85,13 @@
     transition:transform .5s cubic-bezier(.22,1,.36,1);
   }
   .hero-photo.is-hovering img{transform:scale(1.06);}
-  .hero-photo.placeholder{
-    aspect-ratio:4/5;
-    background:repeating-linear-gradient(45deg,#dfe6fa,#dfe6fa 10px,#eef2fd 10px,#eef2fd 20px);
-    transform:rotate(3deg);
-    display:flex;align-items:center;justify-content:center;color:var(--gray-label);
-    font-size:14px;text-align:center;padding:20px;
-  }
 
   /* SECTIONS shared */
   section{padding:90px 24px;max-width:1200px;margin:0 auto;}
   .section-label{display:flex;gap:12px;align-items:center;font-size:13px;letter-spacing:2px;color:var(--gray-label);font-weight:600;margin-bottom:24px;}
   .section-label .num{color:var(--navy);font-weight:700;}
   h2.section-title{font-size:42px;font-weight:800;margin-bottom:24px;}
-  h2.section-title .serif{font-size:46px;}
+  h2.section-title .serif{font-size:46px;display:block;}
 
   /* MANIFESTO */
   .manifesto-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:48px;}
@@ -139,6 +132,11 @@
   .schedule-graphic{
     margin-top:48px;border-radius:24px;overflow:hidden;
     box-shadow:0 20px 50px rgba(28,58,94,0.25);
+    transition:transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease;
+  }
+  .schedule-graphic:hover{
+    transform:translateY(-6px);
+    box-shadow:0 30px 60px rgba(28,58,94,0.32);
   }
   .schedule-graphic img{display:block;width:100%;height:auto;}
 
@@ -157,12 +155,6 @@
     transition:transform .5s cubic-bezier(.22,1,.36,1);
   }
   .gallery-grid > div:hover img{transform:scale(1.09);}
-  .gallery-grid .cap{
-    position:absolute;left:0;right:0;bottom:0;padding:16px;
-    color:#fff;font-size:14px;font-style:italic;font-family:'Playfair Display',serif;
-    background:linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0));
-    transition:opacity .3s ease;
-  }
   @media(max-width:640px){
     .gallery-grid{grid-template-columns:1fr;}
   }
@@ -181,16 +173,27 @@
     color:var(--gray-label);font-size:13px;
   }
 
+  .menu-toggle{
+    display:none;background:none;border:none;font-size:26px;
+    color:var(--navy-dark);cursor:pointer;line-height:1;
+  }
   @media(max-width:820px){
-    nav .nav-links{display:none;}
+    nav{position:relative;flex-wrap:wrap;}
+    nav .nav-links{
+      display:none;width:100%;flex-direction:column;gap:0;
+      order:3;margin-top:20px;
+    }
+    nav .nav-links.open{display:flex;}
+    nav .nav-links a{padding:14px 0;border-top:1px solid var(--border);}
+    .menu-toggle{display:block;}
     .hero{grid-template-columns:1fr;}
     h1.headline{font-size:38px;}
     h1.headline .serif{font-size:38px;}
+    .hero-photo-wrap{margin:40px auto 0;}
     .manifesto-cards{grid-template-columns:1fr;}
     .manifesto-cards .card{border-left:none;border-top:1px solid var(--border);}
     .manifesto-cards .card:first-child{border-top:none;}
     .committees-wrap{grid-template-columns:1fr;}
-    .schedule-list{grid-template-columns:1fr;}
     .countdown-grid{gap:20px;}
   }
 </style>
@@ -199,13 +202,16 @@
 
 <nav>
   <div class="logo">ymhs.</div>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="#about">About</a></li>
     <li><a href="#committees">Committees</a></li>
     <li><a href="#schedule">Schedule</a></li>
     <li><a href="#gallery">Gallery</a></li>
   </ul>
-  <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfQ_Y-i1HSuU8nd0m5Q3q55t3Sfe9vpU7BTgVMZ8bA5ZPHuyA/viewform" target="_blank">Register ↗</a>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfQ_Y-i1HSuU8nd0m5Q3q55t3Sfe9vpU7BTgVMZ8bA5ZPHuyA/viewform" target="_blank">Register ↗</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+  </div>
 </nav>
 
 <div class="hero">
@@ -293,26 +299,26 @@
 
 <section id="schedule" class="schedule-sub">
   <div class="section-label" style="justify-content:center;"><span class="num">03</span> THE DAY</div>
-  <h2 class="section-title">10:00 — 17:30<span class="serif">two sessions, a bonus session, a project block — and room to breathe in between</span></h2>
+  <h2 class="section-title">10:00 — 17:30 <span class="serif">two sessions, a bonus session, a project block — and room to breathe in between</span></h2>
 
   <div class="schedule-graphic">
-    <img src="schedule.jpg" alt="YMHS day schedule: Opening Ceremony 10:00-10:40, Session 1 10:40-12:10, Break 1 12:10-12:30, Session 2 12:30-13:30, Lunch Break 13:30-14:20, Bonus Session 14:20-14:50, Break 2 14:50-15:10, Project Session 15:10-16:10, Closing Ceremony 16:10-17:30" loading="lazy" decoding="async">
+    <img src="schedule.webp" alt="YMHS day schedule: Opening Ceremony 10:00-10:40, Session 1 10:40-12:10, Break 1 12:10-12:30, Session 2 12:30-13:30, Lunch Break 13:30-14:20, Bonus Session 14:20-14:50, Break 2 14:50-15:10, Project Session 15:10-16:10, Closing Ceremony 16:10-17:30" loading="lazy" decoding="async">
   </div>
 </section>
 
 <section id="gallery">
   <div class="section-label"><span class="num">04</span> EDITION 01, IN FRAMES</div>
-  <h2 class="section-title">Last year, we started<span class="serif">talking.</span></h2>
+  <h2 class="section-title">Last year, we started <span class="serif">talking.</span></h2>
   <div class="gallery-grid">
-    <div><img src="gallery-1.jpg" alt="Delegates seated in the audience at edition 01" loading="lazy" decoding="async"><span class="cap">edition 01 — where it all started</span></div>
+    <div><img src="gallery-1.jpg" alt="Delegates seated in the audience at edition 01" loading="lazy" decoding="async"></div>
     <div><img src="gallery-2.jpg" alt="Large group photo of delegates and organizers posing together" loading="lazy" decoding="async"></div>
-    <div><img src="gallery-3.jpg" alt="Three delegates holding up a YMHS photo booth frame" loading="lazy" decoding="async"><span class="cap">pick your committee</span></div>
+    <div><img src="gallery-3.jpg" alt="Three delegates holding up a YMHS photo booth frame" loading="lazy" decoding="async"></div>
     <div><img src="gallery-4.jpg" alt="Four delegates holding up their certificates" loading="lazy" decoding="async"></div>
   </div>
 </section>
 
 <section class="closing">
-  <h2>Your mind<span class="serif">deserves a moment.</span></h2>
+  <h2>Your mind <span class="serif">deserves a moment.</span></h2>
   <p>One day, five rooms, and a chance to say the things you don't usually get to say out loud. Edition 2 is waiting for you.</p>
   <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfQ_Y-i1HSuU8nd0m5Q3q55t3Sfe9vpU7BTgVMZ8bA5ZPHuyA/viewform" target="_blank">APPLY NOW ↗</a>
 </section>
@@ -361,6 +367,22 @@
       ).join('');
     });
   });
+
+  // Mobile nav toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  if (menuToggle && navLinks) {
+    menuToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      menuToggle.textContent = isOpen ? '✕' : '☰';
+    });
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.textContent = '☰';
+    }));
+  }
 
   // Hero photo cursor-tilt
   const heroPhoto = document.getElementById('heroPhoto');
