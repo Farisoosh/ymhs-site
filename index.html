@@ -289,6 +289,7 @@
           <div class="topic-row"><span class="n">02</span><span>The psychology of forgiveness</span></div>
           <div class="topic-row"><span class="n">03</span><span>The silence after conflict</span></div>
           <div class="topic-row"><span class="n">04</span><span>The courage to start over</span></div>
+          <div class="topic-row"><span class="n">05</span><span>Dealing with undeserved shame</span></div>
         </div>
       </div>
     </div>
@@ -344,13 +345,13 @@
   tick();
   setInterval(tick, 1000);
 
-  // Committee tabs — fill in real chairs/topics for 2-5 below
+  // Committee tabs
   const committees = [
-    { names: "Mustafa Othman &amp; Alzahraa Almagsoosi", topics: ["Schizophrenia","The psychology of forgiveness","The silence after conflict","The courage to start over"] },
-    { names: "Add chair names", topics: ["Add topic 1","Add topic 2","Add topic 3","Add topic 4"] },
-    { names: "Add chair names", topics: ["Add topic 1","Add topic 2","Add topic 3","Add topic 4"] },
-    { names: "Add chair names", topics: ["Add topic 1","Add topic 2","Add topic 3","Add topic 4"] },
-    { names: "Add chair names", topics: ["Add topic 1","Add topic 2","Add topic 3","Add topic 4"] },
+    { names: "Mustafa Othman &amp; Alzahraa Almagsoosi", topics: ["Schizophrenia","The psychology of forgiveness","The silence after conflict","The courage to start over","Dealing with undeserved shame"] },
+    { names: "Nour Luay Al Asadi &amp; Razan Alfahad", topics: ["Dissociative Identity Disorder","The science of hope","Embracing ignorance is bliss","Why meaning matters for mental health","Can music heal the mind"] },
+    { names: "Dan Al Nadoos &amp; Fatimah Ali", topics: ["Obsessive Compulsive Disorder","Why we sabotage good things","Why we are so hard on ourselves","The psychological effects of confidence","The placebo effect"] },
+    { names: "Milad Hazim &amp; Roqaya Al Asadi", topics: ["Bipolar Disorder","When stress shows up physically","When your environment is sick","The art of peer pressure","When success doesn't feel like success — imposter syndrome"] },
+    { names: "Aminah Alsader &amp; Teeba Alkinani", topics: ["Eating disorders — anorexia nervosa &amp; bulimia nervosa","FOMO vs JOMO","Bedtime procrastination","Brain on boredom","The addiction to distractions"] },
   ];
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
