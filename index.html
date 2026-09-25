@@ -70,9 +70,10 @@
   .hero-photo{
     position:relative;border-radius:20px;overflow:hidden;
     box-shadow:0 20px 50px rgba(35,67,175,0.15);
-    border:4px solid #fff;max-width:480px;margin-left:auto;
+    border:4px solid #fff;max-width:440px;margin-left:auto;
+    aspect-ratio:4/5;
   }
-  .hero-photo img{display:block;width:100%;height:auto;}
+  .hero-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 30%;}
   .hero-photo.placeholder{
     aspect-ratio:4/5;
     background:repeating-linear-gradient(45deg,#dfe6fa,#dfe6fa 10px,#eef2fd 10px,#eef2fd 20px);
@@ -154,9 +155,13 @@
   /* GALLERY */
   .gallery-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-top:40px;}
   .gallery-grid > div{
-    border-radius:16px;min-height:220px;
-    background:repeating-linear-gradient(45deg,#dfe6fa,#dfe6fa 10px,#eef2fd 10px,#eef2fd 20px);
-    display:flex;align-items:flex-end;color:var(--gray-label);font-size:13px;padding:16px;font-style:italic;
+    border-radius:16px;min-height:220px;overflow:hidden;position:relative;
+  }
+  .gallery-grid img{width:100%;height:100%;object-fit:cover;display:block;}
+  .gallery-grid .cap{
+    position:absolute;left:0;right:0;bottom:0;padding:16px;
+    color:#fff;font-size:13px;font-style:italic;
+    background:linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0));
   }
 
   /* CLOSING CTA */
@@ -222,7 +227,7 @@
     </div>
   </div>
 
-  <div class="hero-photo"><img src="hero-photo.jpg" alt="YMHS edition 01 group photo"></div>
+  <div class="hero-photo"><img src="hero-photo.jpg" alt="Two delegates smiling and holding up YMHS photo booth props"></div>
 </div>
 
 <section id="about">
@@ -309,8 +314,8 @@
   <div class="section-label"><span class="num">04</span> LAST EDITION</div>
   <h2 class="section-title">Moments from<span class="serif"> edition 01.</span></h2>
   <div class="gallery-grid">
-    <div>[ Add crowd / session photo here ]</div>
-    <div>in session — every seat taken</div>
+    <div><img src="gallery-1.jpg" alt="Delegate holding up a certificate on stage at the closing ceremony"><span class="cap">in session — every seat taken</span></div>
+    <div><img src="gallery-2.jpg" alt="Two delegates with their arms around each other outside the venue"></div>
   </div>
 </section>
 
