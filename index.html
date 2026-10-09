@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,600&family=Poppins:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --navy:#2343AF;
@@ -51,6 +51,17 @@
     font-weight:600;font-size:15px;border:none;cursor:pointer;
   }
   .menu-toggle{display:none;background:none;border:none;font-size:26px;color:var(--navy-dark);cursor:pointer;}
+  .lang-toggle{
+    display:inline-flex;align-items:center;gap:2px;background:var(--bg-tint);
+    border:1px solid var(--border);border-radius:999px;padding:4px;font-size:12px;font-weight:700;
+  }
+  .lang-toggle button{
+    border:none;background:none;padding:6px 12px;border-radius:999px;cursor:pointer;
+    color:var(--gray-text);font-weight:700;font-size:12px;letter-spacing:0.5px;
+    font-family:'Poppins','Tajawal',sans-serif;
+  }
+  .lang-toggle button.active{background:var(--navy);color:#fff;}
+  .lang-toggle-row{display:none;padding:14px 0;border-top:1px solid var(--border);}
 
   /* HERO */
   .hero{
@@ -132,16 +143,24 @@
   .schedule-sub h2{font-size:34px;}
   .schedule-sub h2.section-title .serif{color:var(--gray-text);font-size:17px;font-weight:400;display:block;margin-top:12px;font-style:italic;}
 
-  .schedule-graphic{
-    margin:48px auto 0;max-width:760px;border-radius:24px;overflow:hidden;
-    box-shadow:0 20px 50px rgba(28,58,94,0.25);
-    transition:transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease;
+  .schedule-timeline{
+    margin:48px auto 0;max-width:640px;text-align:left;
+    background:#fff;border-radius:24px;overflow:hidden;
+    box-shadow:0 20px 50px rgba(28,58,94,0.15);border:1px solid var(--border);
   }
-  .schedule-graphic:hover{
-    transform:translateY(-6px);
-    box-shadow:0 30px 60px rgba(28,58,94,0.32);
+  .sched-row{
+    display:flex;align-items:center;gap:20px;padding:18px 28px;
+    border-top:1px solid var(--border);
   }
-  .schedule-graphic img{display:block;width:100%;height:auto;}
+  .sched-row:first-child{border-top:none;}
+  .sched-row.is-break{background:var(--bg-tint);}
+  .sched-time{
+    font-weight:800;font-size:14px;color:var(--navy);min-width:118px;flex-shrink:0;
+    font-variant-numeric:tabular-nums;
+    direction:ltr;unicode-bidi:isolate;text-align:left;
+  }
+  .sched-label{font-weight:600;font-size:15px;color:var(--navy-dark);}
+  .sched-row.is-break .sched-label{color:var(--gray-text);font-weight:500;}
 
   /* GALLERY */
   .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px;}
@@ -271,6 +290,29 @@
     .countdown-grid{gap:20px;}
     .register-card{padding:32px 24px;}
     .form-grid{grid-template-columns:1fr;}
+    .lang-toggle{display:none;}
+    .lang-toggle-row{display:flex;}
+  }
+
+  /* ARABIC / RTL */
+  html[dir="rtl"] body{font-family:'Tajawal',sans-serif;}
+  html[dir="rtl"] .serif{font-family:'Tajawal',sans-serif;font-style:normal;font-weight:800;}
+  html[dir="rtl"] .nav-links{flex-direction:row-reverse;}
+  html[dir="rtl"] .hero-photo-wrap{margin-left:0;margin-right:auto;}
+  html[dir="rtl"] .manifesto-cards .card{border-left:none;border-right:1px solid var(--border);}
+  html[dir="rtl"] .manifesto-cards .card:first-child{border-right:none;}
+  html[dir="rtl"] .meta-row,
+  html[dir="rtl"] .footer-social,
+  html[dir="rtl"] .radio-row,
+  html[dir="rtl"] .tabs{flex-direction:row-reverse;}
+  html[dir="rtl"] .committee-head{flex-direction:row-reverse;}
+  html[dir="rtl"] .topic-row{flex-direction:row-reverse;justify-content:flex-end;}
+  html[dir="rtl"] .sched-row{flex-direction:row-reverse;}
+  html[dir="rtl"] .field label,
+  html[dir="rtl"] .field .hint{text-align:right;}
+  html[dir="rtl"] .countdown-grid{flex-direction:row-reverse;}
+  @media(max-width:820px){
+    html[dir="rtl"] .nav-links a{border-top:1px solid var(--border);}
   }
 </style>
 </head>
@@ -279,36 +321,46 @@
 <nav>
   <div class="logo">YMHS</div>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#about">About</a></li>
-    <li><a href="#committees">Committees</a></li>
-    <li><a href="#schedule">Schedule</a></li>
-    <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#register">Register</a></li>
+    <li><a href="#about" data-i18n="About|نبذة"></a></li>
+    <li><a href="#committees" data-i18n="Committees|اللجان"></a></li>
+    <li><a href="#schedule" data-i18n="Schedule|الجدول"></a></li>
+    <li><a href="#gallery" data-i18n="Gallery|الصور"></a></li>
+    <li><a href="#register" data-i18n="Register|التسجيل"></a></li>
+    <li class="lang-toggle-row">
+      <div class="lang-toggle" id="langToggleMobile">
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ar">عربي</button>
+      </div>
+    </li>
   </ul>
   <div style="display:flex;align-items:center;gap:16px;">
-    <a class="btn" href="#register">Register</a>
+    <div class="lang-toggle" id="langToggleDesktop">
+      <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="ar">عربي</button>
+    </div>
+    <a class="btn" href="#register" data-i18n="Register|التسجيل"></a>
     <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
   </div>
 </nav>
 
 <div class="hero">
   <div>
-    <div class="eyebrow">THE 2ND EDITION</div>
-    <h1 class="headline">Youth Mental Health Symposium</h1>
+    <div class="eyebrow" data-i18n="THE 2ND EDITION|النسخة الثانية"></div>
+    <h1 class="headline" data-i18n="Youth Mental Health Symposium|ملتقى الصحة النفسية للشباب"></h1>
     <div class="meta-row">
-      <span>📅 November 21, 2026</span>
-      <span>🕙 10:00 — 17:30</span>
-      <span>📍 <a href="https://www.google.com/maps/place/The+English+International+School-+Baghdad/@33.2666194,44.3568563,17z/data=!3m1!4b1!4m6!3m5!1s0x1559d59b8bc42997:0x9f55a72fe0cccd32!8m2!3d33.2666194!4d44.3568563!16s%2Fg%2F11c2kbgzsq" target="_blank" rel="noopener">The English International School of Baghdad</a></span>
+      <span>📅 <span data-i18n="November 21, 2026|21 نوفمبر 2026"></span></span>
+      <span>🕙 <bdi style="unicode-bidi:isolate;direction:ltr;">10:00 — 17:30</bdi></span>
+      <span>📍 <a href="https://www.google.com/maps/place/The+English+International+School-+Baghdad/@33.2666194,44.3568563,17z/data=!3m1!4b1!4m6!3m5!1s0x1559d59b8bc42997:0x9f55a72fe0cccd32!8m2!3d33.2666194!4d44.3568563!16s%2Fg%2F11c2kbgzsq" target="_blank" rel="noopener" data-i18n="The English International School of Baghdad|المدرسة الإنجليزية الدولية في بغداد"></a></span>
     </div>
-    <a class="btn" href="#register">Apply Now</a>
+    <a class="btn" href="#register" data-i18n="Apply Now|سجّل الآن"></a>
 
     <div class="countdown">
-      <div class="countdown-label">DAYS TILL EVENT</div>
+      <div class="countdown-label" data-i18n="DAYS TILL EVENT|أيام حتى الحدث"></div>
       <div class="countdown-grid">
-        <div><div class="num" id="cd-days">--</div><div class="lbl">DAYS</div></div>
-        <div><div class="num" id="cd-hours">--</div><div class="lbl">HOURS</div></div>
-        <div><div class="num" id="cd-min">--</div><div class="lbl">MINUTES</div></div>
-        <div><div class="num" id="cd-sec">--</div><div class="lbl">SECONDS</div></div>
+        <div><div class="num" id="cd-days">--</div><div class="lbl" data-i18n="DAYS|يوم"></div></div>
+        <div><div class="num" id="cd-hours">--</div><div class="lbl" data-i18n="HOURS|ساعة"></div></div>
+        <div><div class="num" id="cd-min">--</div><div class="lbl" data-i18n="MINUTES|دقيقة"></div></div>
+        <div><div class="num" id="cd-sec">--</div><div class="lbl" data-i18n="SECONDS|ثانية"></div></div>
       </div>
     </div>
   </div>
@@ -319,23 +371,23 @@
 </div>
 
 <section id="about">
-  <div class="section-label"><span class="num">01</span> THE MANIFESTO</div>
-  <h2 class="section-title">Mental health isn't a topic.<br><span class="serif">It's the room we all live in.</span></h2>
+  <div class="section-label"><span class="num">01</span> <span data-i18n="THE MANIFESTO|البيان"></span></div>
+  <h2 class="section-title" data-i18n-html="Mental health isn't a topic.<br><span class='serif'>It's the room we all live in.</span>|الصحة النفسية ليست موضوعاً.<br><span class='serif'>بل الغرفة التي نعيش فيها جميعاً.</span>"></h2>
   <div class="manifesto-cards">
     <div class="card">
       <div class="card-num">01</div>
-      <h3>Pause</h3>
-      <p>Take one day away from school, stress, and everything going on around you. YMHS gives you the space to take a break, and focus on yourself for a little while.</p>
+      <h3 data-i18n="Pause|توقف"></h3>
+      <p data-i18n="Take one day away from school, stress, and everything going on around you. YMHS gives you the space to take a break, and focus on yourself for a little while.|خذ يوماً بعيداً عن المدرسة والضغط وكل ما يحيط بك. يمنحك YMHS مساحة لأخذ استراحة والتركيز على نفسك قليلاً."></p>
     </div>
     <div class="card">
       <div class="card-num">02</div>
-      <h3>Speak</h3>
-      <p>Five committees, each discussing different topics that affect the young people of Iraq. You get to talk, share your opinions, hear other perspectives, and discuss things that we normally don't talk about enough.</p>
+      <h3 data-i18n="Speak|تحدث"></h3>
+      <p data-i18n="Six committees, each discussing different topics that affect the young people of Iraq. You get to talk, share your opinions, hear other perspectives, and discuss things that we normally don't talk about enough.|ست لجان، تناقش كل منها مواضيع مختلفة تمس شباب العراق. ستتحدث، وتشارك آراءك، وتسمع وجهات نظر أخرى، وتناقش أموراً لا نتحدث عنها عادة بما فيه الكفاية."></p>
     </div>
     <div class="card">
       <div class="card-num">03</div>
-      <h3>Heal</h3>
-      <p>Sometimes just talking about something makes it easier to understand. YMHS is a space to have those conversations, hear other people's experiences, and leave knowing a little more about yourself and the people around you.</p>
+      <h3 data-i18n="Heal|اشفِ"></h3>
+      <p data-i18n="Sometimes just talking about something makes it easier to understand. YMHS is a space to have those conversations, hear other people's experiences, and leave knowing a little more about yourself and the people around you.|أحياناً مجرد الحديث عن شيء ما يجعل فهمه أسهل. YMHS مساحة لإجراء هذه الأحاديث، وسماع تجارب الآخرين، والخروج بمعرفة أكبر قليلاً عن نفسك ومن حولك."></p>
     </div>
   </div>
 </section>
@@ -343,23 +395,24 @@
 <section id="committees">
   <div class="committees-wrap">
     <div>
-      <div class="section-label"><span class="num">02</span> WHAT IS A COMMITTEE</div>
-      <h2 class="section-title serif" style="font-size:44px;">Five rooms.</h2>
-      <p class="body">Each committee is a small group led by two chairs, built around one topic and five questions we don't usually get the chance to talk about. You pick the room that speaks to you and sit with people going through the same things. No expertise needed, just show up and talk.</p>
-      <a class="pick-link" href="#committees">PICK YOUR COMMITTEE →</a>
+      <div class="section-label"><span class="num">02</span> <span data-i18n="WHAT IS A COMMITTEE|ما هي اللجنة"></span></div>
+      <h2 class="section-title serif" style="font-size:44px;" data-i18n="Six rooms.|ست غرف."></h2>
+      <p class="body" data-i18n="Each committee is a small group led by two chairs, built around one topic and five questions we don't usually get the chance to talk about. You pick the room that speaks to you and sit with people going through the same things. No expertise needed, just show up and talk.|كل لجنة مجموعة صغيرة يقودها رئيسان، مبنية حول موضوع واحد وأسئلة لا نحصل عادة على فرصة الحديث عنها. تختار الغرفة التي تهمك وتجلس مع أشخاص يمرون بنفس التجارب. لا حاجة لخبرة، فقط احضر وتحدث."></p>
+      <a class="pick-link" href="#committees" data-i18n="PICK YOUR COMMITTEE →|اختر لجنتك ←"></a>
     </div>
     <div>
       <div class="tabs" id="tabs">
-        <div class="tab active" data-i="0">Committee 1</div>
-        <div class="tab" data-i="1">Committee 2</div>
-        <div class="tab" data-i="2">Committee 3</div>
-        <div class="tab" data-i="3">Committee 4</div>
-        <div class="tab" data-i="4">Committee 5</div>
+        <div class="tab active" data-i="0" data-i18n="Committee 1|اللجنة 1"></div>
+        <div class="tab" data-i="1" data-i18n="Committee 2|اللجنة 2"></div>
+        <div class="tab" data-i="2" data-i18n="Committee 3|اللجنة 3"></div>
+        <div class="tab" data-i="3" data-i18n="Committee 4|اللجنة 4"></div>
+        <div class="tab" data-i="4" data-i18n="Committee 5|اللجنة 5"></div>
+        <div class="tab" data-i="5" data-i18n="Arabic Committee|اللجنة العربية"></div>
       </div>
       <div class="committee-card">
         <div class="committee-head">
           <div>
-            <div class="chaired-label">CHAIRED BY</div>
+            <div class="chaired-label" data-i18n="CHAIRED BY|برئاسة"></div>
             <div class="names" id="c-names">Mustafa Othman &amp; Alzahraa Almagsoosi</div>
           </div>
           <div class="big-num" id="c-num">01</div>
@@ -377,17 +430,15 @@
 </section>
 
 <section id="schedule" class="schedule-sub">
-  <div class="section-label" style="justify-content:center;"><span class="num">03</span> THE DAY</div>
-  <h2 class="section-title">10:00 — 17:30 <span class="serif">3 sessions + project session — and room to breathe in between</span></h2>
+  <div class="section-label" style="justify-content:center;"><span class="num">03</span> <span data-i18n="THE DAY|اليوم"></span></div>
+  <h2 class="section-title" data-i18n-html="<bdi style='unicode-bidi:isolate;direction:ltr;'>10:00 — 17:30</bdi> <span class='serif'>3 sessions + project session — and room to breathe in between</span>|<bdi style='unicode-bidi:isolate;direction:ltr;'>10:00 — 17:30</bdi> <span class='serif'>3 جلسات + جلسة مشروع — ومساحة للتنفس بينها</span>"></h2>
 
-  <div class="schedule-graphic">
-    <img src="schedule.webp" alt="YMHS day schedule: Opening Ceremony 10:00-10:40, Session 1 10:40-12:10, Break 1 12:10-12:30, Session 2 12:30-13:30, Lunch Break 13:30-14:20, Bonus Session 14:20-14:50, Break 2 14:50-15:10, Project Session 15:10-16:10, Closing Ceremony 16:10-17:30" loading="lazy" decoding="async">
-  </div>
+  <div class="schedule-timeline" id="scheduleTimeline"></div>
 </section>
 
 <section id="gallery">
-  <div class="section-label"><span class="num">04</span> EDITION 01, IN FRAMES</div>
-  <h2 class="section-title">Last year, we started <span class="serif">talking.</span></h2>
+  <div class="section-label"><span class="num">04</span> <span data-i18n="EDITION 01, IN FRAMES|النسخة الأولى بالصور"></span></div>
+  <h2 class="section-title" data-i18n-html="Last year, we started <span class='serif'>talking.</span>|العام الماضي، بدأنا <span class='serif'>الحديث.</span>"></h2>
   <div class="gallery-grid">
     <div><img src="gallery-1.jpg" alt="Delegates seated in the audience at edition 01" loading="lazy" decoding="async"></div>
     <div><img src="gallery-2.jpg" alt="Large group photo of delegates and organizers posing together" loading="lazy" decoding="async"></div>
@@ -397,141 +448,143 @@
 </section>
 
 <section id="team">
-  <div class="section-label"><span class="num">05</span> THE PEOPLE BEHIND IT</div>
-  <h2 class="section-title">Founder <span class="serif">and director.</span></h2>
+  <div class="section-label"><span class="num">05</span> <span data-i18n="THE PEOPLE BEHIND IT|الأشخاص وراء الحدث"></span></div>
+  <h2 class="section-title" data-i18n-html="Founder <span class='serif'>and director.</span>|المؤسسة <span class='serif'>والمدير.</span>"></h2>
   <div class="team-grid">
     <div class="team-card">
       <div class="team-photo"><img src="team-za.jpg" alt="Zahraa Azeez, founder and former director of YMHS" loading="lazy" decoding="async"></div>
       <div class="team-name">Zahraa Azeez</div>
-      <div class="team-role">Founder &amp; Former Director</div>
+      <div class="team-role" data-i18n="Founder &amp; Former Director|المؤسسة والمديرة السابقة"></div>
     </div>
     <div class="team-card">
       <div class="team-photo"><img src="team-fa.jpg" alt="Faris Alasadi, director of YMHS" loading="lazy" decoding="async"></div>
       <div class="team-name">Faris Alasadi</div>
-      <div class="team-role">Director</div>
+      <div class="team-role" data-i18n="Director|المدير"></div>
     </div>
   </div>
 </section>
 
 <section id="register">
-  <div class="section-label" style="justify-content:center;"><span class="num">06</span> APPLY NOW</div>
-  <h2 class="section-title" style="text-align:center;">Your room is <span class="serif">waiting.</span></h2>
+  <div class="section-label" style="justify-content:center;"><span class="num">06</span> <span data-i18n="APPLY NOW|سجّل الآن"></span></div>
+  <h2 class="section-title" style="text-align:center;" data-i18n-html="Your room is <span class='serif'>waiting.</span>|غرفتك <span class='serif'>بانتظارك.</span>"></h2>
 
   <form class="register-card" id="registerForm" novalidate>
     <div class="form-grid">
       <div class="field">
-        <label for="firstName">First Name *</label>
+        <label for="firstName" data-i18n="First Name *|الاسم الأول *"></label>
         <input type="text" id="firstName" name="firstName" required>
       </div>
       <div class="field">
-        <label for="lastName">Last Name *</label>
+        <label for="lastName" data-i18n="Last Name *|اسم العائلة *"></label>
         <input type="text" id="lastName" name="lastName" required>
       </div>
 
       <div class="field full">
-        <label for="idPhoto">ID / Passport Picture *</label>
+        <label for="idPhoto" data-i18n="ID / Passport Picture *|صورة الهوية / جواز السفر *"></label>
         <input class="file-input" type="file" id="idPhoto" name="idPhoto" accept="image/*" required>
-        <span class="hint">A clear photo of your ID or passport, used only to confirm your registration.</span>
+        <span class="hint" data-i18n="A clear photo of your ID or passport, used only to confirm your registration.|صورة واضحة لهويتك أو جواز سفرك، تُستخدم فقط لتأكيد تسجيلك."></span>
       </div>
 
       <div class="field">
-        <label for="school">School / University Name *</label>
+        <label for="school" data-i18n="School / University Name *|اسم المدرسة / الجامعة *"></label>
         <input type="text" id="school" name="school" required>
       </div>
       <div class="field">
-        <label for="level">School / University Level *</label>
-        <input type="text" id="level" name="level" placeholder="e.g. Grade 11" required>
+        <label for="level" data-i18n="School / University Level *|المرحلة الدراسية *"></label>
+        <input type="text" id="level" name="level" data-i18n-placeholder="e.g. Grade 11|مثال: الصف الحادي عشر" required>
       </div>
 
       <div class="field">
-        <label for="phone">Phone Number *</label>
+        <label for="phone" data-i18n="Phone Number *|رقم الهاتف *"></label>
         <input type="tel" id="phone" name="phone" required>
       </div>
       <div class="field">
-        <label for="email">Email *</label>
+        <label for="email" data-i18n="Email *|البريد الإلكتروني *"></label>
         <input type="email" id="email" name="email" required>
       </div>
 
       <div class="field">
-        <label for="committee1">First Committee Preference *</label>
+        <label for="committee1" data-i18n="First Committee Preference *|الخيار الأول للجنة *"></label>
         <select id="committee1" name="committee1" required>
-          <option value="" disabled selected>Choose one</option>
-          <option>Committee 1</option>
-          <option>Committee 2</option>
-          <option>Committee 3</option>
-          <option>Committee 4</option>
-          <option>Committee 5</option>
+          <option value="" disabled selected data-i18n="Choose one|اختر لجنة"></option>
+          <option value="Committee 1" data-i18n="Committee 1|اللجنة 1"></option>
+          <option value="Committee 2" data-i18n="Committee 2|اللجنة 2"></option>
+          <option value="Committee 3" data-i18n="Committee 3|اللجنة 3"></option>
+          <option value="Committee 4" data-i18n="Committee 4|اللجنة 4"></option>
+          <option value="Committee 5" data-i18n="Committee 5|اللجنة 5"></option>
+          <option value="Arabic Committee" data-i18n="Arabic Committee|اللجنة العربية"></option>
         </select>
       </div>
       <div class="field">
-        <label for="committee2">Second Committee Preference *</label>
+        <label for="committee2" data-i18n="Second Committee Preference *|الخيار الثاني للجنة *"></label>
         <select id="committee2" name="committee2" required>
-          <option value="" disabled selected>Choose one</option>
-          <option>Committee 1</option>
-          <option>Committee 2</option>
-          <option>Committee 3</option>
-          <option>Committee 4</option>
-          <option>Committee 5</option>
+          <option value="" disabled selected data-i18n="Choose one|اختر لجنة"></option>
+          <option value="Committee 1" data-i18n="Committee 1|اللجنة 1"></option>
+          <option value="Committee 2" data-i18n="Committee 2|اللجنة 2"></option>
+          <option value="Committee 3" data-i18n="Committee 3|اللجنة 3"></option>
+          <option value="Committee 4" data-i18n="Committee 4|اللجنة 4"></option>
+          <option value="Committee 5" data-i18n="Committee 5|اللجنة 5"></option>
+          <option value="Arabic Committee" data-i18n="Arabic Committee|اللجنة العربية"></option>
         </select>
       </div>
 
       <div class="field">
-        <label for="englishLevel">English Level *</label>
+        <label for="englishLevel" data-i18n="English Level *|مستوى اللغة الإنجليزية *"></label>
         <select id="englishLevel" name="englishLevel" required>
-          <option value="" disabled selected>Choose one</option>
-          <option>A1-A2</option>
-          <option>B1</option>
-          <option>B2</option>
-          <option>C1</option>
-          <option>C2</option>
+          <option value="" disabled selected data-i18n="Choose one|اختر مستوى"></option>
+          <option value="A1-A2">A1-A2</option>
+          <option value="B1">B1</option>
+          <option value="B2">B2</option>
+          <option value="C1">C1</option>
+          <option value="C2">C2</option>
         </select>
       </div>
       <div class="field">
-        <label>Lunch Preference *</label>
+        <label data-i18n="Lunch Preference *|تفضيل الوجبة *"></label>
         <div class="radio-row">
-          <label><input type="radio" name="lunch" value="Beef" required> Beef</label>
-          <label><input type="radio" name="lunch" value="Chicken" required> Chicken</label>
-          <label><input type="radio" name="lunch" value="Vegetarian" required> Vegetarian</label>
+          <label><input type="radio" name="lunch" value="Beef" required> <span data-i18n="Beef|لحم بقر"></span></label>
+          <label><input type="radio" name="lunch" value="Chicken" required> <span data-i18n="Chicken|دجاج"></span></label>
+          <label><input type="radio" name="lunch" value="Vegetarian" required> <span data-i18n="Vegetarian|نباتي"></span></label>
         </div>
       </div>
 
       <div class="field full">
-        <label for="why">Why do you want to attend YMHS? *</label>
+        <label for="why" data-i18n="Why do you want to attend YMHS? *|لماذا تريد حضور YMHS؟ *"></label>
         <textarea id="why" name="why" required></textarea>
       </div>
 
       <div class="field full">
-        <label for="issue">What is one mental health issue affecting young people today that you think deserves more attention, and why? *</label>
-        <span class="hint">100 words minimum</span>
+        <label for="issue" data-i18n="What is one mental health issue affecting young people today that you think deserves more attention, and why? *|ما هي قضية نفسية واحدة تؤثر على الشباب اليوم وتستحق اهتماماً أكبر برأيك، ولماذا؟ *"></label>
+        <span class="hint" data-i18n="100 words minimum|100 كلمة كحد أدنى"></span>
         <textarea id="issue" name="issue" required></textarea>
       </div>
 
       <div class="field full">
-        <label>Have you attended YMHS before? *</label>
+        <label data-i18n="Have you attended YMHS before? *|هل حضرت YMHS من قبل؟ *"></label>
         <div class="radio-row">
-          <label><input type="radio" name="attendedBefore" value="Yes" required> Yes</label>
-          <label><input type="radio" name="attendedBefore" value="No" required> No</label>
+          <label><input type="radio" name="attendedBefore" value="Yes" required> <span data-i18n="Yes|نعم"></span></label>
+          <label><input type="radio" name="attendedBefore" value="No" required> <span data-i18n="No|لا"></span></label>
         </div>
       </div>
     </div>
 
-    <button class="btn" id="register-submit" type="submit">Submit Application</button>
+    <button class="btn" id="register-submit" type="submit" data-i18n="Submit Application|إرسال الطلب"></button>
     <div class="form-status" id="formStatus"></div>
   </form>
 </section>
 
 <section class="closing">
-  <h2>Your mind <span class="serif">deserves a moment.</span></h2>
-  <p>One day, five rooms, and a chance to say the things you don't usually get to say out loud. The 2nd edition is waiting for you.</p>
-  <a class="btn" href="#register">Apply Now</a>
+  <h2 data-i18n-html="Your mind <span class='serif'>deserves a moment.</span>|عقلك <span class='serif'>يستحق لحظة.</span>"></h2>
+  <p data-i18n="One day, six rooms, and a chance to say the things you don't usually get to say out loud. The 2nd edition is waiting for you.|يوم واحد، ست غرف، وفرصة لقول ما لا تقوله عادة بصوت عالٍ. النسخة الثانية بانتظارك."></p>
+  <a class="btn" href="#register" data-i18n="Apply Now|سجّل الآن"></a>
 </section>
 
 <footer>
   <div class="footer-social">
-    <a href="https://www.instagram.com/ymhs.2026/" target="_blank" rel="noopener">📷 Instagram</a>
-    <a href="https://www.tiktok.com/@ymhs.2026" target="_blank" rel="noopener">🎵 TikTok</a>
+    <a href="https://www.instagram.com/ymhs.2026/" target="_blank" rel="noopener">📷 <span data-i18n="Instagram|انستغرام"></span></a>
+    <a href="https://www.tiktok.com/@ymhs.2026" target="_blank" rel="noopener">🎵 <span data-i18n="TikTok|تيك توك"></span></a>
   </div>
-  © 2026 Youth Mental Health Symposium · youthmentalhealthsymposium.com
+  <span data-i18n="© 2026 Youth Mental Health Symposium · youthmentalhealthsymposium.com|© 2026 ملتقى الصحة النفسية للشباب · youthmentalhealthsymposium.com"></span>
 </footer>
 
 <script>
@@ -553,27 +606,103 @@
   tick();
   setInterval(tick, 1000);
 
+  // Language toggle (EN / AR)
+  let currentLang = localStorage.getItem('ymhsLang') || 'en';
+
+  function applyLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('ymhsLang', lang);
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const [en, ar] = el.dataset.i18n.split('|');
+      el.textContent = lang === 'ar' ? ar : en;
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const [en, ar] = el.dataset.i18nHtml.split('|');
+      el.innerHTML = lang === 'ar' ? ar : en;
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const [en, ar] = el.dataset.i18nPlaceholder.split('|');
+      el.placeholder = lang === 'ar' ? ar : en;
+    });
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+
+    const activeTab = document.querySelector('.tab.active');
+    if (activeTab) renderCommittee(+activeTab.dataset.i);
+    renderSchedule();
+  }
+
+  document.querySelectorAll('.lang-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+  });
+
   // Committee tabs
   const committees = [
-    { names: "Mustafa Othman &amp; Alzahraa Almagsoosi", topics: ["Schizophrenia","The psychology of forgiveness","The silence after conflict","The courage to start over","Dealing with undeserved shame"] },
-    { names: "Nour Luay Al Asadi &amp; Razan Alfahad", topics: ["Dissociative Identity Disorder","The science of hope","Embracing ignorance is bliss","Why meaning matters for mental health","Can music heal the mind"] },
-    { names: "Dan Al Nadoos &amp; Fatimah Ali", topics: ["Obsessive Compulsive Disorder","Why we sabotage good things","Why we are so hard on ourselves","The psychological effects of confidence","The placebo effect"] },
-    { names: "Milad Hazim &amp; Roqaya Al Asadi", topics: ["Bipolar Disorder","When stress shows up physically","When your environment is sick","The art of peer pressure","When success doesn't feel like success — imposter syndrome"] },
-    { names: "Aminah Alsader &amp; Teeba Alkinani", topics: ["Eating disorders — anorexia nervosa &amp; bulimia nervosa","FOMO vs JOMO","Bedtime procrastination","Brain on boredom","The addiction to distractions"] },
+    { names: "Mustafa Othman &amp; Alzahraa Almagsoosi",
+      topics: { en: ["Schizophrenia","The psychology of forgiveness","The silence after conflict","The courage to start over","Dealing with undeserved shame"],
+                ar: ["الفصام","علم نفس الغفران","الصمت بعد الخلاف","شجاعة البدء من جديد","التعامل مع الخجل غير المستحق"] } },
+    { names: "Nour Luay Al Asadi &amp; Razan Alfahad",
+      topics: { en: ["Dissociative Identity Disorder","The science of hope","Embracing ignorance is bliss","Why meaning matters for mental health","Can music heal the mind"],
+                ar: ["اضطراب الهوية الانفصامي","علم الأمل","احتضان الجهل نعمة","لماذا يهم المعنى للصحة النفسية","هل يستطيع الموسيقى أن يشفي العقل"] } },
+    { names: "Dan Al Nadoos &amp; Fatimah Ali",
+      topics: { en: ["Obsessive Compulsive Disorder","Why we sabotage good things","Why we are so hard on ourselves","The psychological effects of confidence","The placebo effect"],
+                ar: ["اضطراب الوسواس القهري","لماذا نخرب الأشياء الجيدة","لماذا نكون قاسين جداً على أنفسنا","الآثار النفسية للثقة بالنفس","تأثير الدواء الوهمي"] } },
+    { names: "Lyan &amp; Ahmed Al-Asadi",
+      topics: { en: ["Bipolar Disorder","When stress shows up physically","When your environment is sick","The art of peer pressure","When success doesn't feel like success — imposter syndrome"],
+                ar: ["اضطراب ثنائي القطب","عندما يظهر التوتر جسدياً","عندما تكون بيئتك مريضة","فن ضغط الأقران","عندما لا يشعر النجاح وكأنه نجاح — متلازمة المحتال"] } },
+    { names: "Aminah Alsader &amp; Teeba Alkinani",
+      topics: { en: ["Eating disorders — anorexia nervosa &amp; bulimia nervosa","FOMO vs JOMO","Bedtime procrastination","Brain on boredom","The addiction to distractions"],
+                ar: ["اضطرابات الأكل — فقدان الشهية العصبي والشره العصبي","الخوف من تفويت الفرصة مقابل متعة تفويتها","تسويف وقت النوم","الدماغ في حالة الملل","إدمان التشتت"] } },
+    { names: "Taqdees Asad &amp; Taghreed Alhabeeb",
+      topics: { en: ["Learning English through the lens of psychology","Eating disorders — what they are, and where recovery begins","Sport: a luxury or a biological need?","Making peace in an imperfect home","The evolutionary psychology of jealousy"],
+                ar: ["طوّر نفسك بالإنجليزية: أسرار من علم النفس تساعدك على التعلّم بشكل أفضل","اضطرابات الأكل: ما هي؟ وكيف نبدأ طريق التعافي؟","الرياضة: رفاهية أم ضرورة بيولوجية؟ تعلّم كيف تعيد الاتصال بجسمك من خلال الحركة","بيتي ليس مثالياً... فكيف أصنع فيه مساحة من السلام","علم النفس التطوري للغيرة"] } },
   ];
+
+  function renderCommittee(i) {
+    const c = committees[i];
+    document.getElementById('c-names').innerHTML = c.names;
+    document.getElementById('c-num').textContent = "0" + (i+1);
+    const topics = c.topics[currentLang];
+    document.getElementById('c-topics').innerHTML = topics.map((t, idx) =>
+      `<div class="topic-row ${idx===0?'active':''}"><span class="n">0${idx+1}</span><span>${t}</span></div>`
+    ).join('');
+  }
+
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-      const i = +tab.dataset.i;
-      const c = committees[i];
-      document.getElementById('c-names').innerHTML = c.names;
-      document.getElementById('c-num').textContent = "0" + (i+1);
-      document.getElementById('c-topics').innerHTML = c.topics.map((t, idx) =>
-        `<div class="topic-row ${idx===0?'active':''}"><span class="n">0${idx+1}</span><span>${t}</span></div>`
-      ).join('');
+      renderCommittee(+tab.dataset.i);
     });
   });
+
+  // Schedule timeline
+  const scheduleData = [
+    { time: "10:00 – 10:40", label: { en: "Opening Ceremony", ar: "حفل الافتتاح" }, isBreak: false },
+    { time: "10:40 – 11:40", label: { en: "Session 1", ar: "الجلسة الأولى" }, isBreak: false },
+    { time: "11:40 – 12:00", label: { en: "Break", ar: "استراحة" }, isBreak: true },
+    { time: "12:00 – 13:00", label: { en: "Session 2", ar: "الجلسة الثانية" }, isBreak: false },
+    { time: "13:00 – 13:50", label: { en: "Lunch", ar: "الغداء" }, isBreak: true },
+    { time: "13:50 – 14:50", label: { en: "Session 3", ar: "الجلسة الثالثة" }, isBreak: false },
+    { time: "14:50 – 15:10", label: { en: "Break", ar: "استراحة" }, isBreak: true },
+    { time: "15:10 – 16:10", label: { en: "Project Session", ar: "جلسة المشروع" }, isBreak: false },
+    { time: "16:10 – 17:30", label: { en: "Closing Ceremony", ar: "حفل الختام" }, isBreak: false },
+  ];
+
+  function renderSchedule() {
+    const el = document.getElementById('scheduleTimeline');
+    if (!el) return;
+    el.innerHTML = scheduleData.map(row =>
+      `<div class="sched-row ${row.isBreak ? 'is-break' : ''}">
+        <div class="sched-time">${row.time}</div>
+        <div class="sched-label">${row.label[currentLang]}</div>
+      </div>`
+    ).join('');
+  }
 
   // Mobile nav toggle
   const menuToggle = document.getElementById('menuToggle');
@@ -656,7 +785,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Submitting…';
+      submitBtn.textContent = currentLang === 'ar' ? 'جارٍ الإرسال…' : 'Submitting…';
 
       try {
         const fd = new FormData(registerForm);
@@ -691,20 +820,27 @@
 
         if (result.result === 'success') {
           registerForm.reset();
-          status.textContent = "You're in. We'll be in touch closer to November 21.";
+          status.textContent = currentLang === 'ar'
+            ? "تم تسجيلك! سنتواصل معك قبل 21 نوفمبر."
+            : "You're in. We'll be in touch closer to November 21.";
           status.className = 'form-status success';
         } else {
           throw new Error(result.message || 'Unknown error');
         }
       } catch (err) {
-        status.textContent = "Something went wrong submitting your application. Please try again, or email us directly.";
+        status.textContent = currentLang === 'ar'
+          ? "حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى أو مراسلتنا مباشرة."
+          : "Something went wrong submitting your application. Please try again, or email us directly.";
         status.className = 'form-status error';
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Application';
+        submitBtn.textContent = currentLang === 'ar' ? 'إرسال الطلب' : 'Submit Application';
       }
     });
   }
+
+  // Initial paint
+  applyLang(currentLang);
 </script>
 
 </body>
