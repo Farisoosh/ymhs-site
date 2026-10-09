@@ -239,7 +239,31 @@
   .register-card{
     background:var(--card-tint);border-radius:28px;
     padding:56px;max-width:760px;margin:0 auto;
+    transition:max-width .5s cubic-bezier(.22,1,.36,1), padding .5s cubic-bezier(.22,1,.36,1);
   }
+  .register-card.is-success{
+    max-width:380px;padding:56px 32px;text-align:center;
+  }
+  .success-box{
+    display:flex;flex-direction:column;align-items:center;gap:18px;
+    animation:successPop .5s cubic-bezier(.22,1,.36,1);
+  }
+  .success-check{width:76px;height:76px;}
+  .success-check-circle{
+    stroke:#1c7c3f;stroke-width:2;
+    stroke-dasharray:160;stroke-dashoffset:160;
+    animation:successCircle .6s ease forwards;
+  }
+  .success-check-mark{
+    stroke:#1c7c3f;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:40;stroke-dashoffset:40;
+    animation:successMark .35s .55s ease forwards;
+  }
+  .success-text{font-size:19px;font-weight:800;color:var(--navy-dark);}
+  .success-text-ar{font-family:'Tajawal',sans-serif;}
+  @keyframes successPop{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+  @keyframes successCircle{to{stroke-dashoffset:0;}}
+  @keyframes successMark{to{stroke-dashoffset:0;}}
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px;}
   .field{display:flex;flex-direction:column;gap:6px;}
   .field.full{grid-column:1 / -1;}
@@ -468,7 +492,8 @@
   <div class="section-label" style="justify-content:center;"><span class="num">06</span> <span data-i18n="APPLY NOW|سجّل الآن"></span></div>
   <h2 class="section-title" style="text-align:center;" data-i18n-html="Your room is <span class='serif'>waiting.</span>|غرفتك <span class='serif'>بانتظارك.</span>"></h2>
 
-  <form class="register-card" id="registerForm" novalidate>
+  <div class="register-card" id="registerCard">
+  <form id="registerForm" novalidate>
     <div class="form-grid">
       <div class="field">
         <label for="firstName" data-i18n="First Name *|الاسم الأول *"></label>
@@ -571,6 +596,16 @@
     <button class="btn" id="register-submit" type="submit" data-i18n="Submit Application|إرسال الطلب"></button>
     <div class="form-status" id="formStatus"></div>
   </form>
+
+  <div class="success-box" id="successBox" hidden>
+    <svg class="success-check" viewBox="0 0 52 52" aria-hidden="true">
+      <circle class="success-check-circle" cx="26" cy="26" r="24" fill="none"/>
+      <path class="success-check-mark" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+    </svg>
+    <div class="success-text">Thank you for applying!</div>
+    <div class="success-text success-text-ar">شكراً لتقديمك!</div>
+  </div>
+  </div>
 </section>
 
 <section class="closing">
@@ -820,10 +855,9 @@
 
         if (result.result === 'success') {
           registerForm.reset();
-          status.textContent = currentLang === 'ar'
-            ? "تم تسجيلك! سنتواصل معك قبل 21 نوفمبر."
-            : "You're in. We'll be in touch closer to November 21.";
-          status.className = 'form-status success';
+          registerForm.hidden = true;
+          document.getElementById('successBox').hidden = false;
+          document.getElementById('registerCard').classList.add('is-success');
         } else {
           throw new Error(result.message || 'Unknown error');
         }
