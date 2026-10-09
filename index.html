@@ -522,7 +522,7 @@
 
       <div class="field">
         <label for="phone" data-i18n="Phone Number *|رقم الهاتف *"></label>
-        <input type="tel" id="phone" name="phone" required>
+        <input type="tel" id="phone" name="phone" pattern="[0-9+\s-]{7,15}" data-i18n-placeholder="e.g. 07701234567|مثال: 07701234567" required>
       </div>
       <div class="field">
         <label for="email" data-i18n="Email *|البريد الإلكتروني *"></label>
@@ -806,6 +806,17 @@
     });
   }
 
+  function showSuccessBox() {
+    const form = document.getElementById('registerForm');
+    form.hidden = true;
+    document.getElementById('successBox').hidden = false;
+    document.getElementById('registerCard').classList.add('is-success');
+  }
+
+  if (localStorage.getItem('ymhsApplied') === '1') {
+    showSuccessBox();
+  }
+
   const registerForm = document.getElementById('registerForm');
   if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {
@@ -855,10 +866,14 @@
         const result = await res.json();
 
         if (result.result === 'success') {
+          localStorage.setItem('ymhsApplied', '1');
           registerForm.reset();
-          registerForm.hidden = true;
-          document.getElementById('successBox').hidden = false;
-          document.getElementById('registerCard').classList.add('is-success');
+          showSuccessBox();
+        } else if (result.result === 'duplicate') {
+          status.textContent = currentLang === 'ar'
+            ? "يبدو أنك قدّمت طلباً بالفعل بهذا البريد الإلكتروني أو رقم الهاتف."
+            : "Looks like you've already applied with this email or phone number.";
+          status.className = 'form-status error';
         } else {
           throw new Error(result.message || 'Unknown error');
         }
