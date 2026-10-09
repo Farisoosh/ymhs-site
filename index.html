@@ -245,9 +245,10 @@
     max-width:380px;padding:56px 32px;text-align:center;
   }
   .success-box{
-    display:flex;flex-direction:column;align-items:center;gap:18px;
+    display:none;flex-direction:column;align-items:center;gap:18px;
     animation:successPop .5s cubic-bezier(.22,1,.36,1);
   }
+  .success-box:not([hidden]){display:flex;}
   .success-check{width:76px;height:76px;}
   .success-check-circle{
     stroke:#1c7c3f;stroke-width:2;
