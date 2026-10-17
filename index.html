@@ -522,11 +522,11 @@
 
       <div class="field">
         <label for="phone" data-i18n="Phone Number *|رقم الهاتف *"></label>
-        <input type="tel" id="phone" name="phone" pattern="[0-9+\s-]{7,15}" data-i18n-placeholder="e.g. 07701234567|مثال: 07701234567" required>
+        <input type="tel" id="phone" name="phone" pattern="[0-9+\s-]{7,20}" data-i18n-placeholder="e.g. 07701234567|مثال: 07701234567" required>
       </div>
       <div class="field">
         <label for="email" data-i18n="Email *|البريد الإلكتروني *"></label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" pattern="[^\s@]+@[^\s@]+\.[^\s@]{2,}" required>
       </div>
 
       <div class="field">
@@ -815,6 +815,35 @@
 
   if (localStorage.getItem('ymhsApplied') === '1') {
     showSuccessBox();
+  }
+
+  // Real phone/email validation (beyond basic browser checks)
+  const phoneInput = document.getElementById('phone');
+  if (phoneInput) {
+    phoneInput.addEventListener('input', () => {
+      const digits = phoneInput.value.replace(/\D/g, '');
+      if (phoneInput.value && (digits.length < 7 || digits.length > 15)) {
+        phoneInput.setCustomValidity(currentLang === 'ar'
+          ? 'يرجى إدخال رقم هاتف صحيح (7 إلى 15 رقماً)'
+          : 'Please enter a valid phone number (7–15 digits)');
+      } else {
+        phoneInput.setCustomValidity('');
+      }
+    });
+  }
+
+  const emailInput = document.getElementById('email');
+  if (emailInput) {
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    emailInput.addEventListener('input', () => {
+      if (emailInput.value && !EMAIL_RE.test(emailInput.value)) {
+        emailInput.setCustomValidity(currentLang === 'ar'
+          ? 'يرجى إدخال بريد إلكتروني صحيح'
+          : 'Please enter a valid email address');
+      } else {
+        emailInput.setCustomValidity('');
+      }
+    });
   }
 
   const registerForm = document.getElementById('registerForm');
