@@ -522,7 +522,7 @@
 
       <div class="field">
         <label for="phone" data-i18n="Phone Number *|رقم الهاتف *"></label>
-        <input type="tel" id="phone" name="phone" pattern="[0-9+\s-]{7,20}" data-i18n-placeholder="e.g. 07701234567|مثال: 07701234567" required>
+        <input type="tel" id="phone" name="phone" data-i18n-placeholder="e.g. 07701234567|مثال: 07701234567" required>
       </div>
       <div class="field">
         <label for="email" data-i18n="Email *|البريد الإلكتروني *"></label>
@@ -820,9 +820,15 @@
   // Real phone/email validation (beyond basic browser checks)
   const phoneInput = document.getElementById('phone');
   if (phoneInput) {
+    const PHONE_CHARS_RE = /^[0-9+()\s.-]*$/;
     phoneInput.addEventListener('input', () => {
-      const digits = phoneInput.value.replace(/\D/g, '');
-      if (phoneInput.value && (digits.length < 7 || digits.length > 15)) {
+      const val = phoneInput.value;
+      const digits = val.replace(/\D/g, '');
+      if (val && !PHONE_CHARS_RE.test(val)) {
+        phoneInput.setCustomValidity(currentLang === 'ar'
+          ? 'رقم الهاتف يحتوي على رموز غير صالحة'
+          : 'Phone number contains invalid characters');
+      } else if (val && (digits.length < 7 || digits.length > 15)) {
         phoneInput.setCustomValidity(currentLang === 'ar'
           ? 'يرجى إدخال رقم هاتف صحيح (7 إلى 15 رقماً)'
           : 'Please enter a valid phone number (7–15 digits)');
