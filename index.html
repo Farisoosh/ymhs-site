@@ -798,12 +798,43 @@
           canvas.width = width;
           canvas.height = height;
           canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', 0.82));
+          const out = canvas.toDataURL('image/jpeg', 0.82);
+          if (out.length < 100) { reject(new Error('Empty canvas export')); return; }
+          resolve(out);
         };
         img.src = reader.result;
       };
       reader.readAsDataURL(file);
     });
+  }
+
+  function readFileAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Some photos (e.g. iPhone/Samsung HEIC files) can't be decoded by every browser.
+  // If resizing fails, send the original file untouched instead of failing the application.
+  const MAX_RAW_PHOTO_BYTES = 8 * 1024 * 1024;
+  async function prepareIdPhoto(file) {
+    try {
+      return {
+        dataUrl: await resizeImageToDataUrl(file, 1600),
+        name: file.name.replace(/\.[^.]+$/, '') + '.jpg',
+        type: 'image/jpeg',
+      };
+    } catch (resizeErr) {
+      if (file.size > MAX_RAW_PHOTO_BYTES) throw resizeErr;
+      return {
+        dataUrl: await readFileAsDataUrl(file),
+        name: file.name,
+        type: file.type || 'application/octet-stream',
+      };
+    }
   }
 
   function showSuccessBox() {
@@ -869,17 +900,18 @@
       submitBtn.disabled = true;
       submitBtn.textContent = currentLang === 'ar' ? 'جارٍ الإرسال…' : 'Submitting…';
 
+      let stage = 'photo';
       try {
         const fd = new FormData(registerForm);
         const idFile = document.getElementById('idPhoto').files[0];
-        const idPhotoDataUrl = idFile ? await resizeImageToDataUrl(idFile, 1600) : '';
+        const idPhoto = idFile ? await prepareIdPhoto(idFile) : { dataUrl: '', name: '', type: 'image/jpeg' };
 
         const payload = {
           firstName: fd.get('firstName'),
           lastName: fd.get('lastName'),
-          idPhoto: idPhotoDataUrl,
-          idPhotoName: idFile ? idFile.name.replace(/\.[^.]+$/, '') + '.jpg' : '',
-          idPhotoType: 'image/jpeg',
+          idPhoto: idPhoto.dataUrl,
+          idPhotoName: idPhoto.name,
+          idPhotoType: idPhoto.type,
           school: fd.get('school'),
           level: fd.get('level'),
           phone: fd.get('phone'),
@@ -893,11 +925,13 @@
           attendedBefore: fd.get('attendedBefore'),
         };
 
+        stage = 'network';
         const res = await fetch(FORM_ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload),
         });
+        stage = 'server';
         const result = await res.json();
 
         if (result.result === 'success') {
@@ -913,9 +947,22 @@
           throw new Error(result.message || 'Unknown error');
         }
       } catch (err) {
-        status.textContent = currentLang === 'ar'
-          ? "حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى أو مراسلتنا مباشرة."
-          : "Something went wrong submitting your application. Please try again, or email us directly.";
+        console.error('Registration failed at stage:', stage, err);
+        const messages = {
+          photo: {
+            en: "We couldn't read your ID photo. Please upload it as a JPG or PNG (a screenshot of the photo works too) and submit again. (Code: PHOTO)",
+            ar: "تعذّر علينا قراءة صورة الهوية. يرجى رفعها بصيغة JPG أو PNG (يمكنك رفع لقطة شاشة للصورة) ثم إعادة الإرسال. (الرمز: PHOTO)",
+          },
+          network: {
+            en: "We couldn't reach our server. Check your internet connection, turn off any VPN or ad blocker, or open this page in another browser, then submit again. (Code: NET)",
+            ar: "تعذّر الاتصال بالخادم. تحقق من اتصالك بالإنترنت، وأوقف أي VPN أو مانع إعلانات، أو افتح الصفحة في متصفح آخر، ثم أعد الإرسال. (الرمز: NET)",
+          },
+          server: {
+            en: "Something went wrong submitting your application. Please try again, or email us directly. (Code: SERVER)",
+            ar: "حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى أو مراسلتنا مباشرة. (الرمز: SERVER)",
+          },
+        };
+        status.textContent = messages[stage][currentLang === 'ar' ? 'ar' : 'en'];
         status.className = 'form-status error';
       } finally {
         submitBtn.disabled = false;
