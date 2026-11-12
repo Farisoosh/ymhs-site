@@ -61,7 +61,6 @@
     font-family:'Poppins','Tajawal',sans-serif;
   }
   .lang-toggle button.active{background:var(--navy);color:#fff;}
-  .lang-toggle-row{display:none;padding:14px 0;border-top:1px solid var(--border);}
 
   /* HERO */
   .hero{
@@ -315,8 +314,12 @@
     .countdown-grid{gap:20px;}
     .register-card{padding:32px 24px;}
     .form-grid{grid-template-columns:1fr;}
-    .lang-toggle{display:none;}
-    .lang-toggle-row{display:flex;}
+    nav{padding:20px 16px;}
+    .nav-actions{gap:8px !important;}
+    nav .btn{padding:10px 14px;font-size:14px;}
+    .lang-toggle{padding:3px;}
+    .lang-toggle button{padding:6px 9px;}
+    .menu-toggle{padding:0 2px;}
   }
 
   /* ARABIC / RTL */
@@ -351,14 +354,8 @@
     <li><a href="#schedule" data-i18n="Schedule|الجدول"></a></li>
     <li><a href="#gallery" data-i18n="Gallery|الصور"></a></li>
     <li><a href="#register" data-i18n="Register|التسجيل"></a></li>
-    <li class="lang-toggle-row">
-      <div class="lang-toggle" id="langToggleMobile">
-        <button type="button" data-lang="en">EN</button>
-        <button type="button" data-lang="ar">عربي</button>
-      </div>
-    </li>
   </ul>
-  <div style="display:flex;align-items:center;gap:16px;">
+  <div class="nav-actions" style="display:flex;align-items:center;gap:16px;">
     <div class="lang-toggle" id="langToggleDesktop">
       <button type="button" data-lang="en">EN</button>
       <button type="button" data-lang="ar">عربي</button>
