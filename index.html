@@ -374,7 +374,7 @@
       <span>🕙 <bdi style="unicode-bidi:isolate;direction:ltr;">09:00 — 17:30</bdi></span>
       <span>📍 <a href="https://www.google.com/maps/place/The+English+International+School-+Baghdad/@33.2666194,44.3568563,17z/data=!3m1!4b1!4m6!3m5!1s0x1559d59b8bc42997:0x9f55a72fe0cccd32!8m2!3d33.2666194!4d44.3568563!16s%2Fg%2F11c2kbgzsq" target="_blank" rel="noopener" data-i18n="The English International School of Baghdad|المدرسة الإنجليزية الدولية في بغداد"></a></span>
     </div>
-    <a class="btn" href="#register" data-i18n="Apply Now|سجّل الآن"></a>
+    <a class="btn" href="#register" data-i18n="Registration Closed|التسجيل مغلق"></a>
 
     <div class="countdown">
       <div class="countdown-label" data-i18n="DAYS TILL EVENT|أيام حتى الحدث"></div>
@@ -487,121 +487,13 @@
 </section>
 
 <section id="register">
-  <div class="section-label" style="justify-content:center;"><span class="num">06</span> <span data-i18n="APPLY NOW|سجّل الآن"></span></div>
-  <h2 class="section-title" style="text-align:center;" data-i18n-html="Your room is <span class='serif'>waiting.</span>|غرفتك <span class='serif'>بانتظارك.</span>"></h2>
+  <div class="section-label" style="justify-content:center;"><span class="num">06</span> <span data-i18n="REGISTRATION|التسجيل"></span></div>
+  <h2 class="section-title" style="text-align:center;" data-i18n-html="Thank you for <span class='serif'>coming.</span>|شكراً <span class='serif'>لحضوركم.</span>"></h2>
 
   <div class="register-card" id="registerCard">
-  <form id="registerForm" novalidate>
-    <div class="form-grid">
-      <div class="field">
-        <label for="firstName" data-i18n="First Name *|الاسم الأول *"></label>
-        <input type="text" id="firstName" name="firstName" required>
-      </div>
-      <div class="field">
-        <label for="lastName" data-i18n="Last Name *|اسم العائلة *"></label>
-        <input type="text" id="lastName" name="lastName" required>
-      </div>
-
-      <div class="field full">
-        <label for="idPhoto" data-i18n="ID / Passport Picture *|صورة الهوية / جواز السفر *"></label>
-        <input class="file-input" type="file" id="idPhoto" name="idPhoto" accept="image/*" required>
-        <span class="hint" data-i18n="A clear photo of your ID or passport, used only to confirm your registration.|صورة واضحة لهويتك أو جواز سفرك، تُستخدم فقط لتأكيد تسجيلك."></span>
-      </div>
-
-      <div class="field">
-        <label for="school" data-i18n="School / University Name *|اسم المدرسة / الجامعة *"></label>
-        <input type="text" id="school" name="school" required>
-      </div>
-      <div class="field">
-        <label for="level" data-i18n="School / University Level *|المرحلة الدراسية *"></label>
-        <input type="text" id="level" name="level" data-i18n-placeholder="e.g. Grade 11|مثال: الصف الحادي عشر" required>
-      </div>
-
-      <div class="field">
-        <label for="phone" data-i18n="Phone Number *|رقم الهاتف *"></label>
-        <input type="tel" id="phone" name="phone" data-i18n-placeholder="e.g. 07701234567|مثال: 07701234567" required>
-      </div>
-      <div class="field">
-        <label for="email" data-i18n="Email *|البريد الإلكتروني *"></label>
-        <input type="email" id="email" name="email" pattern="[^\s@]+@[^\s@]+\.[^\s@]{2,}" required>
-      </div>
-
-      <div class="field">
-        <label for="committee1" data-i18n="First Committee Preference *|الخيار الأول للجنة *"></label>
-        <select id="committee1" name="committee1" required>
-          <option value="" disabled selected data-i18n="Choose one|اختر لجنة"></option>
-          <option value="Committee 1" data-i18n="Committee 1|اللجنة 1"></option>
-          <option value="Committee 2" data-i18n="Committee 2|اللجنة 2"></option>
-          <option value="Committee 3" data-i18n="Committee 3|اللجنة 3"></option>
-          <option value="Committee 4" data-i18n="Committee 4|اللجنة 4"></option>
-          <option value="Committee 5" data-i18n="Committee 5|اللجنة 5"></option>
-          <option value="Arabic Committee" data-i18n="Arabic Committee|اللجنة العربية"></option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="committee2" data-i18n="Second Committee Preference *|الخيار الثاني للجنة *"></label>
-        <select id="committee2" name="committee2" required>
-          <option value="" disabled selected data-i18n="Choose one|اختر لجنة"></option>
-          <option value="Committee 1" data-i18n="Committee 1|اللجنة 1"></option>
-          <option value="Committee 2" data-i18n="Committee 2|اللجنة 2"></option>
-          <option value="Committee 3" data-i18n="Committee 3|اللجنة 3"></option>
-          <option value="Committee 4" data-i18n="Committee 4|اللجنة 4"></option>
-          <option value="Committee 5" data-i18n="Committee 5|اللجنة 5"></option>
-          <option value="Arabic Committee" data-i18n="Arabic Committee|اللجنة العربية"></option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="englishLevel" data-i18n="English Level *|مستوى اللغة الإنجليزية *"></label>
-        <select id="englishLevel" name="englishLevel" required>
-          <option value="" disabled selected data-i18n="Choose one|اختر مستوى"></option>
-          <option value="A1-A2">A1-A2</option>
-          <option value="B1">B1</option>
-          <option value="B2">B2</option>
-          <option value="C1">C1</option>
-          <option value="C2">C2</option>
-        </select>
-      </div>
-      <div class="field">
-        <label data-i18n="Lunch Preference *|تفضيل الوجبة *"></label>
-        <div class="radio-row">
-          <label><input type="radio" name="lunch" value="Beef" required> <span data-i18n="Beef|لحم بقر"></span></label>
-          <label><input type="radio" name="lunch" value="Chicken" required> <span data-i18n="Chicken|دجاج"></span></label>
-          <label><input type="radio" name="lunch" value="Vegetarian" required> <span data-i18n="Vegetarian|نباتي"></span></label>
-        </div>
-      </div>
-
-      <div class="field full">
-        <label for="why" data-i18n="Why do you want to attend YMHS? *|لماذا تريد حضور YMHS؟ *"></label>
-        <textarea id="why" name="why" required></textarea>
-      </div>
-
-      <div class="field full">
-        <label for="issue" data-i18n="What is one mental health issue affecting young people today that you think deserves more attention, and why? *|ما هي قضية نفسية واحدة تؤثر على الشباب اليوم وتستحق اهتماماً أكبر برأيك، ولماذا؟ *"></label>
-        <span class="hint" data-i18n="100 words minimum|100 كلمة كحد أدنى"></span>
-        <textarea id="issue" name="issue" required></textarea>
-      </div>
-
-      <div class="field full">
-        <label data-i18n="Have you attended YMHS before? *|هل حضرت YMHS من قبل؟ *"></label>
-        <div class="radio-row">
-          <label><input type="radio" name="attendedBefore" value="Yes" required> <span data-i18n="Yes|نعم"></span></label>
-          <label><input type="radio" name="attendedBefore" value="No" required> <span data-i18n="No|لا"></span></label>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn" id="register-submit" type="submit" data-i18n="Submit Application|إرسال الطلب"></button>
-    <div class="form-status" id="formStatus"></div>
-  </form>
-
-  <div class="success-box" id="successBox" hidden>
-    <svg class="success-check" viewBox="0 0 52 52" aria-hidden="true">
-      <circle class="success-check-circle" cx="26" cy="26" r="24" fill="none"/>
-      <path class="success-check-mark" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-    </svg>
-    <div class="success-text">Thank you for applying!</div>
-    <div class="success-text success-text-ar">شكراً لتقديمك!</div>
+  <div class="registration-closed" style="text-align:center;">
+    <p style="font-size:20px;font-weight:600;margin:0 0 10px;" data-i18n="Registration is now closed.|التسجيل مغلق الآن."></p>
+    <p style="margin:0;" data-i18n="Thank you to everyone who applied and joined us on November 21, 2026.|شكراً لكل من سجّل وانضم إلينا في 21 نوفمبر 2026."></p>
   </div>
   </div>
 </section>
@@ -609,7 +501,7 @@
 <section class="closing">
   <h2 data-i18n-html="Your mind <span class='serif'>deserves a moment.</span>|عقلك <span class='serif'>يستحق لحظة.</span>"></h2>
   <p data-i18n="One day, six rooms, and a chance to say the things you don't usually get to say out loud. The 2nd edition is waiting for you.|يوم واحد، ست غرف، وفرصة لقول ما لا تقوله عادة بصوت عالٍ. النسخة الثانية بانتظارك."></p>
-  <a class="btn" href="#register" data-i18n="Apply Now|سجّل الآن"></a>
+  <a class="btn" href="#register" data-i18n="Registration Closed|التسجيل مغلق"></a>
 </section>
 
 <footer>
@@ -842,7 +734,7 @@
     document.getElementById('registerCard').classList.add('is-success');
   }
 
-  if (localStorage.getItem('ymhsApplied') === '1') {
+  if (document.getElementById('registerForm') && localStorage.getItem('ymhsApplied') === '1') {
     showSuccessBox();
   }
 
